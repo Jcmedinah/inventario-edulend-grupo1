@@ -1,7 +1,7 @@
 package com.grupo1.inventarioedulend.categories.controllers;
 
 import java.util.List;
-import java.util.Optional;
+//import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

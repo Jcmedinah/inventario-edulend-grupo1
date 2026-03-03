@@ -1,7 +1,6 @@
 package com.grupo1.inventarioedulend.loans.controllers;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.grupo1.inventarioedulend.loans.models.Loan;
@@ -14,7 +13,7 @@ public class LoanController {
 
     private final LoanService loanService;
 
-    @Autowired
+    //@Autowired
     public LoanController(LoanService loanService) {
         this.loanService = loanService;
     }

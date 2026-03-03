@@ -1,7 +1,7 @@
 package com.grupo1.inventarioedulend.articles.controllers;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @Autowired
+    //@Autowired
     public ArticleController(ArticleService articleService) {
         // Al igual que con Loans, inyectamos directamente el Service
         this.articleService = articleService;

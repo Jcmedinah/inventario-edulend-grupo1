@@ -69,7 +69,7 @@ Desarrollar una solución tecnológica para administrar préstamos e inventarios
 | Wilder Garcia           | Backend / Arquitectura           |Wigek              | 
 | Jean Medina             | Backend / Arquitectura           |Jcmedinah          |             
 | Alejandra Alvarez       | Frontend                         |                   |
-| Carlos Andres Perez     | Base de datos / Backend          |Andres0218         |           
+| Carlos Andres Perez     | Base de datos / Backend          |Andres0818         |           
 
 ---
 

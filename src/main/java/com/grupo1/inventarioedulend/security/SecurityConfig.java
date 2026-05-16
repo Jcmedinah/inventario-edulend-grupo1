@@ -30,6 +30,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                        "/",
                         "/api/auth/**",
                         "/api/users/register", // Asumiendo que hay un endpoint de registro público
                         "/v3/api-docs/**",

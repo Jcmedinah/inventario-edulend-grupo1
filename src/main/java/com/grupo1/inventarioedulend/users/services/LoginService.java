@@ -5,38 +5,32 @@ import org.springframework.stereotype.Service;
 
 import com.grupo1.inventarioedulend.users.datasource.UserRepository;
 import com.grupo1.inventarioedulend.users.models.User;
-import com.grupo1.inventarioedulend.users.models.AuthResponse;
-import com.grupo1.inventarioedulend.security.JwtService;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Service
 public class LoginService {
 
     private final UserRepository userRepository;
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
 
     // Constructor manual para mantener la consistencia con el equipo
-    public LoginService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtService jwtService) {
+    public LoginService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
     }
 
-    public AuthResponse login(String email, String password) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
+    public User login(String email, String password) {
+        // Buscamos al usuario por su email
+        Optional<User> userOpt = userRepository.findByEmail(email);
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("El usuario no existe"));
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("El usuario no existe");
+        }
 
-        String jwtToken = jwtService.generateToken(user);
+        User user = userOpt.get();
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .user(user)
-                .build();
+        // Verificamos la contraseña (texto plano por ahora, como en tu código original)
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        return user;
     }
 }

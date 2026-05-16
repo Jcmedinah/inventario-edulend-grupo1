@@ -6,17 +6,14 @@ import org.springframework.stereotype.Service;
 
 import com.grupo1.inventarioedulend.users.datasource.UserRepository;
 import com.grupo1.inventarioedulend.users.models.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public User create(User user) {
@@ -25,7 +22,6 @@ public class UserService {
         if (existing.isPresent()) {
             throw new RuntimeException("El correo ya está registrado.");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

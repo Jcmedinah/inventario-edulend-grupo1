@@ -58,6 +58,22 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public void changePassword(int id, com.grupo1.inventarioedulend.users.dto.ChangePasswordDTO request) {
+        User existing = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+
+        if (!existing.getPassword().equals(request.currentPassword())) {
+            throw new RuntimeException("Error al cambiar la contraseña. Verifica tu contraseña actual.");
+        }
+
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw new RuntimeException("Las nuevas contraseñas no coinciden.");
+        }
+
+        existing.setPassword(request.newPassword());
+        userRepository.save(existing);
+    }
+
     // --- Mapeo Manual ---
 
     public UserDTO convertToDTO(User user) {

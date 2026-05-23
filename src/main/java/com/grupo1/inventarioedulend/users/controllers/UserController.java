@@ -47,4 +47,15 @@ public class UserController {
         userService.delete(user_id);
         return ResponseEntity.ok("Usuario eliminado correctamente.");
     }
-}
+
+    @PutMapping("/{user_id}/password")
+    public ResponseEntity<String> changePassword(@PathVariable int user_id, @RequestBody com.grupo1.inventarioedulend.users.dto.ChangePasswordDTO request) {
+        try {
+            userService.changePassword(user_id, request);
+            return ResponseEntity.ok("Contraseña actualizada correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+}
+

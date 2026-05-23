@@ -37,6 +37,16 @@ public class LoanService {
 
     public LoanDTO create(LoanCreateDTO request) {
         Loan loan = convertToEntity(request);
+        
+        Article article = loan.getItem();
+        if (loan.isStatus()) {
+            if (article.getQuantity_available() <= 0) {
+                throw new RuntimeException("Sin stock disponible para este artículo.");
+            }
+            article.setQuantity_available(article.getQuantity_available() - 1);
+            articleRepository.save(article);
+        }
+
         return convertToDTO(loanRepository.save(loan));
     }
 
@@ -72,24 +82,54 @@ public class LoanService {
         Loan existing = loanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Préstamo no encontrado"));
 
+        Article oldArticle = existing.getItem();
+        boolean oldStatus = existing.isStatus();
+
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
                 
-        Article article = articleRepository.findById(request.itemId())
+        Article newArticle = articleRepository.findById(request.itemId())
                 .orElseThrow(() -> new RuntimeException("Artículo no encontrado"));
 
+        boolean newStatus = request.status();
+
+        if (oldStatus) {
+            oldArticle.setQuantity_available(oldArticle.getQuantity_available() + 1);
+            articleRepository.save(oldArticle);
+        }
+
+        if (newStatus) {
+            if (newArticle.getQuantity_available() <= 0) {
+                if (oldStatus) {
+                    oldArticle.setQuantity_available(oldArticle.getQuantity_available() - 1);
+                    articleRepository.save(oldArticle);
+                }
+                throw new RuntimeException("Sin stock disponible para el artículo seleccionado.");
+            }
+            newArticle.setQuantity_available(newArticle.getQuantity_available() - 1);
+            articleRepository.save(newArticle);
+        }
+
         existing.setUser(user);
-        existing.setItem(article);
+        existing.setItem(newArticle);
         existing.setLoan_date(request.loan_date());
         existing.setDue_date(request.due_date());
         existing.setReturn_date(request.return_date());
-        existing.setStatus(request.status());
+        existing.setStatus(newStatus);
 
         return convertToDTO(loanRepository.save(existing));
     }
 
     public void delete(int id) {
-        loanRepository.deleteById(id);
+        Loan existing = loanRepository.findById(id).orElse(null);
+        if (existing != null) {
+            if (existing.isStatus()) {
+                Article article = existing.getItem();
+                article.setQuantity_available(article.getQuantity_available() + 1);
+                articleRepository.save(article);
+            }
+            loanRepository.deleteById(id);
+        }
     }
 
     // --- Mapeo Manual ---

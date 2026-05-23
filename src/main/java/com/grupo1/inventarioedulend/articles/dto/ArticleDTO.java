@@ -7,5 +7,7 @@ public record ArticleDTO(
     String name,
     String description,
     CategoryDTO category,
-    int quantity_available
+    int quantity_available,
+    int quantity_total,
+    int quantity_damaged
 ) {}

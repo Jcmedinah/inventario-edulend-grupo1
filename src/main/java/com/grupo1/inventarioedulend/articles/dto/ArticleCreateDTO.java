@@ -4,5 +4,6 @@ public record ArticleCreateDTO(
     String name,
     String description,
     int categoryId,
-    int quantity_available
+    int quantity_total,
+    int quantity_damaged
 ) {}

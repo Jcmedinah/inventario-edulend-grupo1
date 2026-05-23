@@ -33,6 +33,12 @@ public class Article {
     @Column(nullable = false)
     private int quantity_available = 0;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int quantity_total = 0;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int quantity_damaged = 0;
+
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 

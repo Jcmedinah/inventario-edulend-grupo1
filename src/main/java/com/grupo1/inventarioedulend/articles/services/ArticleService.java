@@ -55,7 +55,11 @@ public class ArticleService {
         existing.setName(request.name());
         existing.setDescription(request.description());
         existing.setCategory(category);
-        existing.setQuantity_available(request.quantity_available());
+        
+        int borrowed = existing.getQuantity_total() - existing.getQuantity_available() - existing.getQuantity_damaged();
+        existing.setQuantity_total(request.quantity_total());
+        existing.setQuantity_damaged(request.quantity_damaged());
+        existing.setQuantity_available(request.quantity_total() - request.quantity_damaged() - borrowed);
 
         return convertToDTO(articleRepository.save(existing));
     }
@@ -76,7 +80,9 @@ public class ArticleService {
                 article.getName(),
                 article.getDescription(),
                 categoryDTO,
-                article.getQuantity_available()
+                article.getQuantity_available(),
+                article.getQuantity_total(),
+                article.getQuantity_damaged()
         );
     }
 
@@ -88,7 +94,9 @@ public class ArticleService {
         article.setName(dto.name());
         article.setDescription(dto.description());
         article.setCategory(category);
-        article.setQuantity_available(dto.quantity_available());
+        article.setQuantity_total(dto.quantity_total());
+        article.setQuantity_damaged(dto.quantity_damaged());
+        article.setQuantity_available(dto.quantity_total() - dto.quantity_damaged());
         return article;
     }
 }
